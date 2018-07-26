@@ -30,8 +30,8 @@ public class Vector {
     public Vector (double[] array, int dimension) {
         if (array.length == dimension) {
             data = new double[dimension];
-            for (int i = 0; i < array.length; i++)
-                data[i] = array[i]; // copies array content
+            // copies array content
+            System.arraycopy(array, 0, data, 0, array.length);
         }
     }
 
@@ -95,20 +95,21 @@ public class Vector {
      * containing the span of the set of vectors.
      */
     public int span (List<Vector> vectors, int dimension) {
-        // TODO: Do Gauss-Jordan Elimination
+        // Perform Gauss-Jordan Elimination here
+        Gauss_Jordan(vectors, dimension, new Vector(dimension));
+        int ctr, span = 0;
 
-        // What will be the parameter for Vector constants when Gauss-Jordan Elimination is called?
-        // Zero ba lahat?
+        for (int row = 0; row < dimension; row++) { // iterate through rows
+            ctr = 0;
+            for (Vector vector : vectors) { // iterate through columns
+                if (vector.data[row] != 0) // count all instances of non-zero elements in row
+                    ctr++;
+            }
 
-        /*
-         * How to get the Span according to StackOverflow
-         *
-         * For example, given this set of vectors: {[1,3,3],[0,0,1],[1,3,1]}
-         * The span will be:
-         * a[1, 3, 3] + b[0, 0, 1] + c[1, 3, 1], which would be [a + c, 3a + 3c, 3a + b + c],
-         * where a, b, and c are arbitrary constants.
-         */
+            if (ctr == 0) // if counter is 0 (all elements are zero)
+                span++;
+        }
 
-        return 0; // TODO: Change this into actual span
+        return span;
     }
 }
