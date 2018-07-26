@@ -95,9 +95,20 @@ public class Vector {
      * containing the span of the set of vectors.
      */
     public int span (List<Vector> vectors, int dimension) {
-        // TODO: Do Gauss-Jordan Elimination here
+        // TODO: Do Gauss-Jordan Elimination
+
+        // What will be the parameter for Vector constants when Gauss-Jordan Elimination is called?
+        // Zero ba lahat?
+
+        /*
+         * How to get the Span according to StackOverflow
+         *
+         * For example, given this set of vectors: {[1,3,3],[0,0,1],[1,3,1]}
+         * The span will be:
+         * a[1, 3, 3] + b[0, 0, 1] + c[1, 3, 1], which would be [a + c, 3a + 3c, 3a + b + c],
+         * where a, b, and c are arbitrary constants.
+         */
 
         return 0; // TODO: Change this into actual span
     }
-
 }
