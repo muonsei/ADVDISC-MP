@@ -65,6 +65,25 @@ public class Vector {
 
         return new Vector(sumVector, this.dimension);
     }
+    public int getGCD(int first, int second)
+    {
+    	if(first != 0 && second == 0)
+    		return first;
+    	else if(first == 0 && second != 0)
+    		return second;
+    		else if(first == 0 && second == 0)
+    			return 0;
+    			else{
+    				if(first > second)
+    					return getGCD(first%second, second);
+    				else
+    					return getGCD(first, second%first);
+    			}
+    }
+    public int getLCM(int first, int second)
+    {
+    	return first*second/getGCD(first,second);
+    }
 
     /*
      * The function must be static-like in nature, and must be callable from the Vector class.
@@ -80,6 +99,27 @@ public class Vector {
      */
     public Vector Gauss_Jordan (List<Vector> vectors, int dimension, Vector constants) {
         // TODO: Do Gauss-Jordan Elimination here
+
+    	//replace nth digit with 1 and 
+        for (int row = 0; row < dimension; row++) { 
+            	if(vectors.get(row).data[row] != 1)
+            	{
+
+            		//turn to 1
+            		double d = 1 / (double) vectors.get(row).data[row];
+            		vectors.get(row).scale((double) 1 / d);
+            		//turn sa baba 0
+            		for(int col = 0; col < vectors.size(); col++)
+            		{
+            			//get lcm of first two numbers
+            			//subtract both to get a 0 for the first number
+            			//use the 1 and multiply it by the second number
+            			//subtract and place to the second number
+            			//divide the 1 again to get 1
+
+            		}
+            	}
+            }
 
         // If no solution exists return null
         return null;
