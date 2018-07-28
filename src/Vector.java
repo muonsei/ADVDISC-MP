@@ -100,27 +100,49 @@ public class Vector {
     public Vector Gauss_Jordan (List<Vector> vectors, int dimension, Vector constants) {
         // TODO: Do Gauss-Jordan Elimination here
 
-    	//replace nth digit with 1 and 
-        for (int row = 0; row < dimension; row++) { 
-            	if(vectors.get(row).data[row] != 1)
-            	{
+    	// Add constants/result to the vectors
+		vectors.add(constants);
 
-            		//turn to 1
-            		double d = 1 / (double) vectors.get(row).data[row];
-            		vectors.get(row).scale((double) 1 / d);
-            		//turn sa baba 0
-            		for(int col = 0; col < vectors.size(); col++)
-            		{
-            			//get lcm of first two numbers
-            			//subtract both to get a 0 for the first number
-            			//use the 1 and multiply it by the second number
-            			//subtract and place to the second number
-            			//divide the 1 again to get 1
+		// Traverse through the "rows"
+		for(int i=0;i<dimension;i++) 
+		{
+			// Sort by putting zeros below
+			if(vectors.get(i).data[i] == 0)
+			{
+				boolean isReplaced = false;
+				for(int j=i+1;j<dimension && !isReplaced;j++)
+				{
+					// Check if nonzero in ith element
+					if(vectors.get(j).data[i] != 0) {
+						// Swap whole rows
+						isReplaced = true;
+					}
+				}
+			}
 
-            		}
-            	}
-            }
+			double[] pivotRowArray = new double[vectors.size()];
+			// Make ith element into 1
+			for(int j=i;j<vectors.size();j++){
+				vectors.get(j).data[i] /= vectors.get(i).data[i];
+				pivotRowArray[j] = vectors.get(j).data[i];
+			}
 
+			// Reduce bottom to row echelon form
+			for(int j=i+1;j<dimension;j++) {	// Go from pivot to last row
+				for(int k=i+1;k<vectors.size();k++)	// Left to right excluding 0th columns
+					// Make it into 0; row = (pivot * row) - row
+					vectors.get(j).data[k] = (pivotRowArray[k] * vectors.get(j).data[k]) - vectors.get(j).data[k];
+			}
+
+			// Reduce top to row echelon form
+			for(int j=i-1;j<0;j--) {	// Go from pivot to 0th row
+				for(int k=i+1;k<vectors.size();k++)	// Left to right excluding 0th columns
+					// Make it into 0; row = row - (pivot * row)
+					vectors.get(j).data[k] = vectors.get(j).data[k] - (pivotRowArray[k] * vectors.get(j).data[k]);
+			}
+		}
+
+		return vectors.get(vectors.size()-1);
         // If no solution exists return null
         return null;
     }
