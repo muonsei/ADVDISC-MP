@@ -5,7 +5,7 @@
  * ADVDISC S17
  */
 
-import java.util.List;
+import java.util.ArrayList;
 
 // A proper implementation of a vector function via the usage of a List-like data structure. (5 points)
 public class Vector {
@@ -31,6 +31,7 @@ public class Vector {
         if (array.length == dimension) {
             data = new double[dimension];
             // copies array content
+            this.dimension = dimension;
             System.arraycopy(array, 0, data, 0, array.length);
         }
     }
@@ -97,7 +98,7 @@ public class Vector {
      * and [2 3] in constants), the function must return a null pointer instead of the solution
      * Vector to denote no solution.
      */
-    public Vector Gauss_Jordan (List<Vector> vectors, int dimension, Vector constants) {
+    public static Vector Gauss_Jordan (ArrayList<Vector> vectors, int dimension, Vector constants) {
         // TODO: Do Gauss-Jordan Elimination here
 
     	// Add constants/result to the vectors
@@ -122,29 +123,54 @@ public class Vector {
 
 			double[] pivotRowArray = new double[vectors.size()];
 			// Make ith element into 1
-			for(int j=i;j<vectors.size();j++){
-				vectors.get(j).data[i] /= vectors.get(i).data[i];
+			double pivotElement = vectors.get(i).data[i];
+			for(int j=i;j<vectors.size();j++) {
+				vectors.get(j).data[i] /= pivotElement;
 				pivotRowArray[j] = vectors.get(j).data[i];
 			}
 
 			// Reduce bottom to row echelon form
-			for(int j=i+1;j<dimension;j++) {	// Go from pivot to last row
-				for(int k=i+1;k<vectors.size();k++)	// Left to right excluding 0th columns
-					// Make it into 0; row = (pivot * row) - row
-					vectors.get(j).data[k] = (pivotRowArray[k] * vectors.get(j).data[k]) - vectors.get(j).data[k];
+			for(int k=i+1;k<dimension;k++) // Go from pivot to last row
+			{ 
+				double multiplier = vectors.get(i).data[k];	// Yung magiging 0 na element
+				for(int j=i;j<vectors.size();j++) // Left to right excluding 0th columns
+					vectors.get(j).data[k] = (pivotRowArray[j] * multiplier) - vectors.get(j).data[k];
 			}
 
-			// Reduce top to row echelon form
-			for(int j=i-1;j<0;j--) {	// Go from pivot to 0th row
-				for(int k=i+1;k<vectors.size();k++)	// Left to right excluding 0th columns
-					// Make it into 0; row = row - (pivot * row)
-					vectors.get(j).data[k] = vectors.get(j).data[k] - (pivotRowArray[k] * vectors.get(j).data[k]);
+			for(int x=0;x<dimension;x++)
+			{
+				System.out.print("[");
+				for(Vector vector: vectors)
+				{
+					System.out.print(" " + vector.data[x]);
+				}
+				System.out.println("]");
 			}
+			System.out.println("\n--------------------------\n");
+
+			// Reduce top to row echelon form
+			for(int k=i-1;k>=0;k--) // Go from pivot to first row
+			{ 
+				double multiplier = vectors.get(i).data[k];	// Yung magiging 0 na element
+				for(int j=i;j<vectors.size();j++) // Left to right excluding 0th columns
+					vectors.get(j).data[k] = vectors.get(j).data[k] - (pivotRowArray[j] * multiplier);
+			}
+		
+			for(int x=0;x<dimension;x++)
+			{
+				System.out.print("[");
+				for(Vector vector: vectors)
+				{
+					System.out.print(" " + vector.data[x]);
+				}
+				System.out.println("]");
+			}
+			System.out.println("\n--------------------------\n");
 		}
 
 		return vectors.get(vectors.size()-1);
         // If no solution exists return null
-        return null;
+        //return null;
     }
 
     /*
@@ -156,7 +182,7 @@ public class Vector {
      * of a vector inside vecList, Vector.span(vecList, dim) should return an integer variable
      * containing the span of the set of vectors.
      */
-    public int span (List<Vector> vectors, int dimension) {
+    public int span (ArrayList<Vector> vectors, int dimension) {
         // Perform Gauss-Jordan Elimination here
         Gauss_Jordan(vectors, dimension, new Vector(dimension));
         int ctr, span = 0;
@@ -173,5 +199,18 @@ public class Vector {
         }
 
         return span;
+    }
+
+    public static void main(String[] args) {
+    	// Test Case
+    	ArrayList<Vector> testGJE = new ArrayList<Vector>();
+    	testGJE.add(new Vector(new double[]{1, 2, 4}, 3));
+    	testGJE.add(new Vector(new double[]{1, 3, 0}, 3));
+    	testGJE.add(new Vector(new double[]{1, 5, 5}, 3));
+
+    	Vector result = Gauss_Jordan(testGJE, 3, new Vector(new double[]{5, 8, 2}, 3));
+    	for(int i=0;i<result.data.length;i++)
+    		System.out.println(result.data[i]);
+    	System.out.println(result.dimension);
     }
 }
