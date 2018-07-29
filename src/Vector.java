@@ -5,7 +5,7 @@
  * ADVDISC S17
  */
 
-import java.util.List;
+import java.util.ArrayList;
 
 // A proper implementation of a vector function via the usage of a List-like data structure. (5 points)
 public class Vector {
@@ -31,6 +31,7 @@ public class Vector {
         if (array.length == dimension) {
             data = new double[dimension];
             // copies array content
+            this.dimension = dimension;
             System.arraycopy(array, 0, data, 0, array.length);
         }
     }
@@ -97,32 +98,78 @@ public class Vector {
      * and [2 3] in constants), the function must return a null pointer instead of the solution
      * Vector to denote no solution.
      */
-    public Vector Gauss_Jordan (List<Vector> vectors, int dimension, Vector constants) {
+    public static Vector Gauss_Jordan (ArrayList<Vector> vectors, int dimension, Vector constants) {
         // TODO: Do Gauss-Jordan Elimination here
 
-    	//replace nth digit with 1 and 
-        for (int row = 0; row < dimension; row++) { 
-            	if(vectors.get(row).data[row] != 1)
-            	{
+    	// Add constants/result to the vectors
+		vectors.add(constants);
 
-            		//turn to 1
-            		double d = 1 / (double) vectors.get(row).data[row];
-            		vectors.get(row).scale((double) 1 / d);
-            		//turn sa baba 0
-            		for(int col = 0; col < vectors.size(); col++)
-            		{
-            			//get lcm of first two numbers
-            			//subtract both to get a 0 for the first number
-            			//use the 1 and multiply it by the second number
-            			//subtract and place to the second number
-            			//divide the 1 again to get 1
+		// Traverse through the "rows"
+		for(int i=0;i<dimension;i++) 
+		{
+			// Sort by putting zeros below
+			if(vectors.get(i).data[i] == 0)
+			{
+				boolean isReplaced = false;
+				for(int j=i+1;j<dimension && !isReplaced;j++)
+				{
+					// Check if nonzero in ith element
+					if(vectors.get(j).data[i] != 0) {
+						// Swap whole rows
+						isReplaced = true;
+					}
+				}
+			}
 
-            		}
-            	}
-            }
+			double[] pivotRowArray = new double[vectors.size()];
+			// Make ith element into 1
+			double pivotElement = vectors.get(i).data[i];
+			for(int j=i;j<vectors.size();j++) {
+				vectors.get(j).data[i] /= pivotElement;
+				pivotRowArray[j] = vectors.get(j).data[i];
+			}
 
+			// Reduce bottom to row echelon form
+			for(int k=i+1;k<dimension;k++) // Go from pivot to last row
+			{ 
+				double multiplier = vectors.get(i).data[k];	// Yung magiging 0 na element
+				for(int j=i;j<vectors.size();j++) // Left to right excluding 0th columns
+					vectors.get(j).data[k] = (pivotRowArray[j] * multiplier) - vectors.get(j).data[k];
+			}
+
+			for(int x=0;x<dimension;x++)
+			{
+				System.out.print("[");
+				for(Vector vector: vectors)
+				{
+					System.out.print(" " + vector.data[x]);
+				}
+				System.out.println("]");
+			}
+			System.out.println("\n--------------------------\n");
+
+			// Reduce top to row echelon form
+			for(int k=i-1;k>=0;k--) // Go from pivot to first row
+			{ 
+				double multiplier = vectors.get(i).data[k];	// Yung magiging 0 na element
+				for(int j=i;j<vectors.size();j++) // Left to right excluding 0th columns
+					vectors.get(j).data[k] = vectors.get(j).data[k] - (pivotRowArray[j] * multiplier);
+			}
+		
+			for(int x=0;x<dimension;x++)
+			{
+				System.out.print("[");
+				for(Vector vector: vectors)
+				{
+					System.out.print(" " + vector.data[x]);
+				}
+				System.out.println("]");
+			}
+			System.out.println("\n--------------------------\n");
+		}
+		return vectors.remove(vectors.size()  - 1);
         // If no solution exists return null
-        return null;
+        //return null;
     }
 
     /*
@@ -134,7 +181,7 @@ public class Vector {
      * of a vector inside vecList, Vector.span(vecList, dim) should return an integer variable
      * containing the span of the set of vectors.
      */
-    public int span (List<Vector> vectors, int dimension) {
+    public static int span (ArrayList<Vector> vectors, int dimension) {
         // Perform Gauss-Jordan Elimination here
         Gauss_Jordan(vectors, dimension, new Vector(dimension));
         int ctr, span = 0;
@@ -151,5 +198,19 @@ public class Vector {
         }
 
         return span;
+    }
+
+    public static void main(String[] args) {
+    	// Test Case
+    	ArrayList<Vector> testGJE = new ArrayList<Vector>();
+    	testGJE.add(new Vector(new double[]{1, 2, 4}, 3));
+    	testGJE.add(new Vector(new double[]{1, 3, 0}, 3));
+    	testGJE.add(new Vector(new double[]{1, 5, 5}, 3));
+    	System.out.println("Span: " + span(testGJE, testGJE.size()));
+    	Vector result = Gauss_Jordan(testGJE, 3, new Vector(new double[]{5, 8, 2}, 3));
+    	for(int i=0;i<result.data.length;i++)
+    		System.out.println("Vector " + (i + 1) + " " + result.data[i]);
+    	System.out.println("dimension " + result.dimension);
+    	//System.out.println("Span2: " + span(testGJE, testGJE.size()));
     }
 }
