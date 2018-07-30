@@ -124,8 +124,11 @@ public class Vector {
 			// Make ith element into 1
 			double pivotElement = vectors.get(i).data[i];
 			for(int j=i;j<vectors.size();j++) {
-				vectors.get(j).data[i] /= pivotElement;
-				pivotRowArray[j] = vectors.get(j).data[i];
+				if(pivotElement != 0)
+				{
+					vectors.get(j).data[i] /= pivotElement;
+					pivotRowArray[j] = vectors.get(j).data[i];
+				}
 			}
 
 			// Reduce bottom to row echelon form
@@ -150,6 +153,7 @@ public class Vector {
 			// Reduce top to row echelon form
 			for(int k=i-1;k>=0;k--) // Go from pivot to first row
 			{ 
+
 				double multiplier = vectors.get(i).data[k];	// Yung magiging 0 na element
 				for(int j=i;j<vectors.size();j++) // Left to right excluding 0th columns
 					vectors.get(j).data[k] = vectors.get(j).data[k] - (pivotRowArray[j] * multiplier);
@@ -217,7 +221,7 @@ public class Vector {
     public static void main(String[] args) {
     	// Test Case
     	ArrayList<Vector> testGJE = new ArrayList<Vector>();
-    	//testGJE.add(new Vector(new double[]{1, 1}, 2));// 1 2 4 - 3
+    	//testGJE.(new Vector(new double[]{1, 1}, 2));// 1 2 4 - 3
     	//testGJE.add(new Vector(new double[]{1, 3, 0}, 3));
     	//testGJE.add(new Vector(new double[]{1, 5, 5}, 3));
     	testGJE.add(new Vector(new double[]{1, 2, 3, 4}, 4));
