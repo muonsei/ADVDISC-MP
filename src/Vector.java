@@ -100,8 +100,6 @@ public class Vector {
      */
     public static Vector Gauss_Jordan (ArrayList<Vector> vectors, int dimension, Vector constants) {
         // TODO: Do Gauss-Jordan Elimination here
-    	if(constants.dimension != vectors.size())
-    		return null;
     	// Add constants/result to the vectors
 		vectors.add(constants);
 
@@ -168,6 +166,7 @@ public class Vector {
 			}
 			System.out.println("\n--------------------------\n");
 		}
+
 		Vector tobeReturned = vectors.remove(vectors.size()  - 1);
         // If no solution exists return null
         boolean  checking = true;
@@ -185,7 +184,6 @@ public class Vector {
        		return null;
        	else
        		return tobeReturned;
-        //return null;
     }
 
     /*
@@ -209,7 +207,7 @@ public class Vector {
                     ctr++;
             }
 
-            if (ctr == 0) // if counter is 0 (all elements are zero)
+            if (ctr > 0) // if counter is 0 (all elements are zero)
                 span++;
         }
 
@@ -219,11 +217,16 @@ public class Vector {
     public static void main(String[] args) {
     	// Test Case
     	ArrayList<Vector> testGJE = new ArrayList<Vector>();
-    	testGJE.add(new Vector(new double[]{2, 1}, 1));// 1 2 4 - 3
+    	//testGJE.add(new Vector(new double[]{1, 1}, 2));// 1 2 4 - 3
     	//testGJE.add(new Vector(new double[]{1, 3, 0}, 3));
     	//testGJE.add(new Vector(new double[]{1, 5, 5}, 3));
-    	//System.out.println("Span: " + span(testGJE, testGJE.size()));
-    	Vector result = Gauss_Jordan(testGJE, 3, new Vector(new double[]{2, 3}, 1));// 5 8 2- 3
+    	testGJE.add(new Vector(new double[]{1, 2, 3, 4}, 4));
+    	testGJE.add(new Vector(new double[]{2, 3 , 4, 5}, 4));
+    	testGJE.add(new Vector(new double[]{1, 4, 5, 7}, 4));
+    	testGJE.add(new Vector(new double[]{2, 7, 8, 9}, 4));
+    	System.out.println("Span: " + span(testGJE, testGJE.size()));
+   
+    	Vector result = Gauss_Jordan(testGJE, 4, new Vector(new double[]{0, 0, 0, 0}, 4));// 5 8 2- 3
     	if(result != null)
     	{
     	for(int i=0;i<result.data.length;i++)
@@ -233,5 +236,6 @@ public class Vector {
     	}
     	else
     		System.out.println("null");
+
     }
 }
