@@ -167,8 +167,23 @@ public class Vector {
 			}
 			System.out.println("\n--------------------------\n");
 		}
-		return vectors.remove(vectors.size()  - 1);
+		Vector tobeReturned = vectors.remove(vectors.size()  - 1);
         // If no solution exists return null
+        boolean  checking = true;
+        //loop to check if nxn
+        for(int i = 0; i < vectors.size(); i++)
+        	if(vectors.size() != vectors.get(i).data.length)
+        		checking = false;
+        	//checking if there's a zero row
+        for(int i = 0; i < vectors.size(); i++)
+        	for(int x = 0; x < vectors.get(i).data.length; x++)
+        		if(i == x && vectors.get(i).data[x] != 1)
+        			checking = false;
+
+       if(checking == false)
+       		return null;
+       	else
+       		return tobeReturned;
         //return null;
     }
 
