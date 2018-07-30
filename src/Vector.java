@@ -100,7 +100,8 @@ public class Vector {
      */
     public static Vector Gauss_Jordan (ArrayList<Vector> vectors, int dimension, Vector constants) {
         // TODO: Do Gauss-Jordan Elimination here
-
+    	if(constants.dimension != vectors.size())
+    		return null;
     	// Add constants/result to the vectors
 		vectors.add(constants);
 
@@ -218,14 +219,19 @@ public class Vector {
     public static void main(String[] args) {
     	// Test Case
     	ArrayList<Vector> testGJE = new ArrayList<Vector>();
-    	testGJE.add(new Vector(new double[]{1, 2, 4}, 3));
-    	testGJE.add(new Vector(new double[]{1, 3, 0}, 3));
-    	testGJE.add(new Vector(new double[]{1, 5, 5}, 3));
-    	System.out.println("Span: " + span(testGJE, testGJE.size()));
-    	Vector result = Gauss_Jordan(testGJE, 3, new Vector(new double[]{5, 8, 2}, 3));
+    	testGJE.add(new Vector(new double[]{2, 1}, 1));// 1 2 4 - 3
+    	//testGJE.add(new Vector(new double[]{1, 3, 0}, 3));
+    	//testGJE.add(new Vector(new double[]{1, 5, 5}, 3));
+    	//System.out.println("Span: " + span(testGJE, testGJE.size()));
+    	Vector result = Gauss_Jordan(testGJE, 3, new Vector(new double[]{2, 3}, 1));// 5 8 2- 3
+    	if(result != null)
+    	{
     	for(int i=0;i<result.data.length;i++)
     		System.out.println("Vector " + (i + 1) + " " + result.data[i]);
     	System.out.println("dimension " + result.dimension);
     	//System.out.println("Span2: " + span(testGJE, testGJE.size()));
+    	}
+    	else
+    		System.out.println("null");
     }
 }
