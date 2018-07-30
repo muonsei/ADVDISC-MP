@@ -29,9 +29,19 @@ public class Driver {
 			constArr[b] = sc.nextDouble();
 
 		Vector result = Vector.Gauss_Jordan(testGJE, numDims, new Vector(constArr, 3));
-    	for(int i=0;i<result.data.length;i++)
-    		System.out.println("Vector " + (i + 1) + " " + result.data[i]);
-    	System.out.println("dimension " + result.dimension);
+		if(result != null)
+		{
+	    	for(int i=0;i<result.data.length;i++)
+	    	{
+	    		if(result.data[i] == -0.0)
+	    			System.out.println("Vector " + (i + 1) + " " + Math.abs(result.data[i]));
+	    		else
+	    			System.out.println("Vector " + (i + 1) + " " + result.data[i]);
+	    	}
+	    	System.out.println("dimension " + result.dimension);
+    	}
+    	else
+    		System.out.println("Answer is null");
 
 		/* Test Case
     	ArrayList<Vector> testGJE = new ArrayList<Vector>();

@@ -139,16 +139,6 @@ public class Vector {
 					vectors.get(j).data[k] = (pivotRowArray[j] * multiplier) - vectors.get(j).data[k];
 			}
 
-			for(int x=0;x<dimension;x++)
-			{
-				System.out.print("[");
-				for(Vector vector: vectors)
-				{
-					System.out.print(" " + vector.data[x]);
-				}
-				System.out.println("]");
-			}
-			System.out.println("\n--------------------------\n");
 
 			// Reduce top to row echelon form
 			for(int k=i-1;k>=0;k--) // Go from pivot to first row
@@ -158,17 +148,6 @@ public class Vector {
 				for(int j=i;j<vectors.size();j++) // Left to right excluding 0th columns
 					vectors.get(j).data[k] = vectors.get(j).data[k] - (pivotRowArray[j] * multiplier);
 			}
-		
-			for(int x=0;x<dimension;x++)
-			{
-				System.out.print("[");
-				for(Vector vector: vectors)
-				{
-					System.out.print(" " + vector.data[x]);
-				}
-				System.out.println("]");
-			}
-			System.out.println("\n--------------------------\n");
 		}
 
 		Vector tobeReturned = vectors.remove(vectors.size()  - 1);
@@ -218,28 +197,4 @@ public class Vector {
         return span;
     }
 
-    public static void main(String[] args) {
-    	// Test Case
-    	ArrayList<Vector> testGJE = new ArrayList<Vector>();
-    	//testGJE.(new Vector(new double[]{1, 1}, 2));// 1 2 4 - 3
-    	//testGJE.add(new Vector(new double[]{1, 3, 0}, 3));
-    	//testGJE.add(new Vector(new double[]{1, 5, 5}, 3));
-    	testGJE.add(new Vector(new double[]{1, 2, 3, 4}, 4));
-    	testGJE.add(new Vector(new double[]{2, 3 , 4, 5}, 4));
-    	testGJE.add(new Vector(new double[]{1, 4, 5, 7}, 4));
-    	testGJE.add(new Vector(new double[]{2, 7, 8, 9}, 4));
-    	System.out.println("Span: " + span(testGJE, testGJE.size()));
-   
-    	Vector result = Gauss_Jordan(testGJE, 4, new Vector(new double[]{0, 0, 0, 0}, 4));// 5 8 2- 3
-    	if(result != null)
-    	{
-    	for(int i=0;i<result.data.length;i++)
-    		System.out.println("Vector " + (i + 1) + " " + result.data[i]);
-    	System.out.println("dimension " + result.dimension);
-    	//System.out.println("Span2: " + span(testGJE, testGJE.size()));
-    	}
-    	else
-    		System.out.println("null");
-
-    }
 }
