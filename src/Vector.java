@@ -5,7 +5,7 @@
  * ADVDISC S17
  */
 
-import java.util.List;
+import java.util.ArrayList;
 
 // A proper implementation of a vector function via the usage of a List-like data structure. (5 points)
 public class Vector {
@@ -21,16 +21,18 @@ public class Vector {
      */
     public Vector(int dimension) {
         data = new double[dimension]; // default value for new double arrays are 0.0
+        this.dimension = dimension;
     }
 
-     /*
-      * A proper implementation of a constructor, converting an already-existing array/list of data
-      * from a rudimentary data structure into the vector class.
-      */
+    /*
+     * A proper implementation of a constructor, converting an already-existing array/list of data
+     * from a rudimentary data structure into the vector class.
+     */
     public Vector (double[] array, int dimension) {
         if (array.length == dimension) {
             data = new double[dimension];
             // copies array content
+            this.dimension = dimension;
             System.arraycopy(array, 0, data, 0, array.length);
         }
     }
@@ -65,6 +67,25 @@ public class Vector {
 
         return new Vector(sumVector, this.dimension);
     }
+    public int getGCD(int first, int second)
+    {
+        if(first != 0 && second == 0)
+            return first;
+        else if(first == 0 && second != 0)
+            return second;
+        else if(first == 0 && second == 0)
+            return 0;
+        else{
+            if(first > second)
+                return getGCD(first%second, second);
+            else
+                return getGCD(first, second%first);
+        }
+    }
+    public int getLCM(int first, int second)
+    {
+        return first*second/getGCD(first,second);
+    }
 
     /*
      * The function must be static-like in nature, and must be callable from the Vector class.
@@ -78,11 +99,75 @@ public class Vector {
      * and [2 3] in constants), the function must return a null pointer instead of the solution
      * Vector to denote no solution.
      */
-    public Vector Gauss_Jordan (List<Vector> vectors, int dimension, Vector constants) {
+    public static Vector Gauss_Jordan (ArrayList<Vector> vectors, int dimension, Vector constants) {
         // TODO: Do Gauss-Jordan Elimination here
+        // Add constants/result to the vectors
+        vectors.add(constants);
 
+        // Traverse through the "rows"
+        for(int i=0;i<dimension;i++)
+        {
+            // Sort by putting zeros below
+            if(vectors.get(i).data[i] == 0)
+            {
+                boolean isReplaced = false;
+                for(int j=i+1;j<dimension && !isReplaced;j++)
+                {
+                    // Check if nonzero in ith element
+                    if(vectors.get(j).data[i] != 0) {
+                        // Swap whole rows
+                        isReplaced = true;
+                    }
+                }
+            }
+
+            double[] pivotRowArray = new double[vectors.size()];
+            // Make ith element into 1
+            double pivotElement = vectors.get(i).data[i];
+            for(int j=i;j<vectors.size();j++) {
+                if(pivotElement != 0)
+                {
+                    vectors.get(j).data[i] /= pivotElement;
+                    pivotRowArray[j] = vectors.get(j).data[i];
+                }
+            }
+
+            // Reduce bottom to row echelon form
+            for(int k=i+1;k<dimension;k++) // Go from pivot to last row
+            {
+                double multiplier = vectors.get(i).data[k];	// Yung magiging 0 na element
+                for(int j=i;j<vectors.size();j++) // Left to right excluding 0th columns
+                    vectors.get(j).data[k] = (pivotRowArray[j] * multiplier) - vectors.get(j).data[k];
+            }
+
+
+            // Reduce top to row echelon form
+            for(int k=i-1;k>=0;k--) // Go from pivot to first row
+            {
+
+                double multiplier = vectors.get(i).data[k];	// Yung magiging 0 na element
+                for(int j=i;j<vectors.size();j++) // Left to right excluding 0th columns
+                    vectors.get(j).data[k] = vectors.get(j).data[k] - (pivotRowArray[j] * multiplier);
+            }
+        }
+
+        Vector tobeReturned = vectors.remove(vectors.size()  - 1);
         // If no solution exists return null
-        return null;
+        boolean  checking = true;
+        //loop to check if nxn
+        for(int i = 0; i < vectors.size(); i++)
+            if(vectors.size() != vectors.get(i).data.length)
+                checking = false;
+        //checking if there's a zero row
+        for(int i = 0; i < vectors.size(); i++)
+            for(int x = 0; x < vectors.get(i).data.length; x++)
+                if(i == x && vectors.get(i).data[x] != 1)
+                    checking = false;
+
+        if(checking == false)
+            return null;
+        else
+            return tobeReturned;
     }
 
     /*
@@ -94,7 +179,7 @@ public class Vector {
      * of a vector inside vecList, Vector.span(vecList, dim) should return an integer variable
      * containing the span of the set of vectors.
      */
-    public int span (List<Vector> vectors, int dimension) {
+    public static int span (ArrayList<Vector> vectors, int dimension) {
         // Perform Gauss-Jordan Elimination here
         Gauss_Jordan(vectors, dimension, new Vector(dimension));
         int ctr, span = 0;
@@ -106,10 +191,11 @@ public class Vector {
                     ctr++;
             }
 
-            if (ctr == 0) // if counter is 0 (all elements are zero)
+            if (ctr > 0) // if counter is 0 (all elements are zero)
                 span++;
         }
 
         return span;
     }
+
 }
