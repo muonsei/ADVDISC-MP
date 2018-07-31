@@ -94,7 +94,7 @@ public class Driver {
 		for(int b=0;b<numDims;b++)
 			constArr[b] = sc.nextDouble();
 
-		Vector result = Vector.Gauss_Jordan(testGJE, numDims, new Vector(constArr, 3));
+		Vector result = Vector.Gauss_Jordan(testGJE, numDims, new Vector(constArr, numDims));
 		if(result != null)
 		{
 			for(int i=0;i<result.data.length;i++)
