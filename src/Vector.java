@@ -105,13 +105,13 @@ public class Vector {
         vectors.add(constants);
 
         // Traverse through the "rows"
-        for(int i=0;i<dimension;i++)
+        for(int i=0;i<vectors.size();i++)
         {
             // Sort by putting zeros below
             if(vectors.get(i).data[i] == 0)
             {
                 boolean isReplaced = false;
-                for(int j=i+1;j<dimension && !isReplaced;j++)
+                for(int j=i+1;!isReplaced;j++)
                 {
                     // Check if nonzero in ith element
                     if(vectors.get(j).data[i] != 0) {
