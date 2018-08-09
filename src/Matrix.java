@@ -5,17 +5,39 @@
  * ADVDISC S17
  */
 
-import java.util.ArrayList;
+import java.util.*;
 
 //
 public class Matrix {
     // Attributes
-
+	List<Vector> vectorList = new ArrayList<>();
 
 
     /*------------------ A proper implementation of a Matrix function via the usage of the created Vector data structure ------------------*/
+    public Matrix(int dimension){
 
-
+    	double[] arrayHolder = new double[dimension];
+    	for(int x = 0; x < dimension; x++)
+    	{
+	    	for(int i = 0; i < dimension; i++)
+	    	{
+	    		if(x == i)
+	    		arrayHolder[i] = 1;
+	    		else
+	    			arrayHolder[i] = 0;
+	    	}
+	    	vectorList.add(new Vector(arrayHolder, arrayHolder.length));
+    	}
+    }
+    public void printMatrix()
+    {
+    	for(Vector a: vectorList)
+    	{
+    		for(int i = 0; i < a.data.length; i++)
+    		System.out.print(a.data[i] + " ");
+    	System.out.println("");
+    	}
+    }
     //A proper implementation of a default constructor that initializes the matrix as an identity matrix of a given dimension.
 
     //A proper implementation of a constructor, converting an already-existing array/list of data from a rudimentary data structure into the vector class.
@@ -38,4 +60,10 @@ public class Matrix {
     /* -------------------- An implementation of a function that finds the inverse of the matrix ------------------------------- */
     	//The function must incorporate an implementation of Gauss-Jordan Elimination. The function must return a null value if the matrix is not invertible; the matrix does not have an inverse.
     	//Usage example: Given a Matrix m, m.inverse() should return a matrix containing the matrix inverse of m.
+
+public static void main(String args[])
+{
+	Matrix g = new Matrix(3);
+	g.printMatrix();
+}
 }
