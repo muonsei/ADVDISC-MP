@@ -9,13 +9,18 @@ import java.util.*;
 
 //
 public class Matrix {
-    // Attributes
-	List<Vector> vectorList = new ArrayList<>();
+    //The usage of an Array/List-like structure to store Matrix data as a list of Vectors. You may also store the Matrix as a 2d array.
 
+    //The usage of immutable Integer variables to hold values for the number of rows/columns.
+	List<Vector> vectorList = new ArrayList<>();
+	final int ROWS;
+	final int COLS;
 
     /*------------------ A proper implementation of a Matrix function via the usage of the created Vector data structure ------------------*/
-    public Matrix(int dimension){
+   
 
+    //A proper implementation of a default constructor that initializes the matrix as an identity matrix of a given dimension.
+     public Matrix(int dimension){
     	double[] arrayHolder = new double[dimension];
     	for(int x = 0; x < dimension; x++)
     	{
@@ -28,24 +33,20 @@ public class Matrix {
 	    	}
 	    	vectorList.add(new Vector(arrayHolder, arrayHolder.length));
     	}
+    	ROWS = vectorList.size();
+	    COLS = dimension;
     }
-    public void printMatrix()
-    {
-    	for(Vector a: vectorList)
-    	{
-    		for(int i = 0; i < a.data.length; i++)
-    		System.out.print(a.data[i] + " ");
-    	System.out.println("");
-    	}
-    }
-    //A proper implementation of a default constructor that initializes the matrix as an identity matrix of a given dimension.
-
     //A proper implementation of a constructor, converting an already-existing array/list of data from a rudimentary data structure into the vector class.
     	//the dimension variable refers to the length of each vector inside list
+    public Matrix (List<Vector> list, int dimension){
+    	for(Vector a: list)
+    	{
+    		vectorList.add(a);
+    	}
+    	ROWS = vectorList.size();
+	    COLS = dimension;
+    }
 
-    //The usage of an Array/List-like structure to store Matrix data as a list of Vectors. You may also store the Matrix as a 2d array.
-
-    //The usage of immutable Integer variables to hold values for the number of rows/columns.
 
      /*------------------ An implementation of function for matrix multiplication ------------------*/
 
@@ -60,10 +61,20 @@ public class Matrix {
     /* -------------------- An implementation of a function that finds the inverse of the matrix ------------------------------- */
     	//The function must incorporate an implementation of Gauss-Jordan Elimination. The function must return a null value if the matrix is not invertible; the matrix does not have an inverse.
     	//Usage example: Given a Matrix m, m.inverse() should return a matrix containing the matrix inverse of m.
+    /* ------------------ Add-On Functions --------------- */
+    public void printMatrix()
+    {
+    	for(Vector a: vectorList)
+    	{
+    		for(int i = 0; i < a.data.length; i++)
+    		System.out.print(a.data[i] + " ");
+    	System.out.println("");
+    	}
+    }
+	public static void main(String args[])
+	{
+		Matrix g = new Matrix(3);
+		g.printMatrix();
+	}
 
-public static void main(String args[])
-{
-	Matrix g = new Matrix(3);
-	g.printMatrix();
-}
 }
