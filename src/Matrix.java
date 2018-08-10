@@ -21,6 +21,7 @@ public class Matrix {
 
     //A proper implementation of a default constructor that initializes the matrix as an identity matrix of a given dimension.
      public Matrix(int dimension){
+
     	double[] arrayHolder = new double[dimension];
     	for(int x = 0; x < dimension; x++)
     	{
@@ -33,6 +34,7 @@ public class Matrix {
 	    	}
 	    	vectorList.add(new Vector(arrayHolder, arrayHolder.length));
     	}
+    	//baliktad ba?
     	ROWS = vectorList.size();
 	    COLS = dimension;
     }
@@ -43,6 +45,7 @@ public class Matrix {
     	{
     		vectorList.add(a);
     	}
+    	//baliktad ba?
     	ROWS = vectorList.size();
 	    COLS = dimension;
     }
@@ -53,6 +56,37 @@ public class Matrix {
      //Function header to be used: Matrix times (Matrix other)
      	//Usage example: Assuming a Matrix a and Matrix b exists, a.times(b) should output the matrix multiplication of a and b.
 		//Errors for size mismatches when multiplying matrices must also be handled.
+     public Matrix matrixMulti(Matrix other)
+     {
+     		List<Vector> insideList = new ArrayList<>();
+     		double[] arrayHolder = new double[other.COLS];
+     		/*	
+     		for(int i = 0; i < ROWS; i++){//move row for A 
+     			for(int x = 0; x < other.COLS; x++)//move col for B to continue multiplying
+     			{
+     				for(int o = 0; o < COLS; o++)//multiplying step
+     				{ 
+     					arrayHolder[x] += vectorList.get(i).data[o] * other.vectorList.get(o).data[x];
+     				}
+     			}
+     				insideList.add(new Vector(arrayHolder, arrayHolder.length));
+     		}
+     			return new Matrix(insideList, insideList.size());
+     	}
+     		*/
+
+     		for(int aIterator = 0; aIterator < COLS; aIterator++)
+     		{
+     			for(int bIterator = 0; bIterator < other.ROWS; bIterator++)
+     			{
+     				for(int multiplier = 0; multiplier < other.COLS; multiplier++)
+     					arrayHolder[bIterator] += vectorList.get(multiplier).data[aIterator] * other.vectorList.get(bIterator).data[multiplier];
+     			}
+     			insideList.add(new Vector(arrayHolder, arrayHolder.length));
+     		}
+     		return new Matrix(insideList, insideList.size());
+     }
+     	
 
     /* -------------------- An implementation of a function that performs Gauss-Jordan Elimination to find the determinant of the matrix. (10 points) ---------*/
     	//The function must incorporate an implementation of Gauss-Jordan Elimination.
@@ -71,10 +105,14 @@ public class Matrix {
     	System.out.println("");
     	}
     }
+
 	public static void main(String args[])
 	{
 		Matrix g = new Matrix(3);
-		g.printMatrix();
+		Matrix z = new Matrix(3);
+		//g.printMatrix();
+		(g.matrixMulti(z)).printMatrix();
+		//g.checkVertical(1);
 	}
 
 }
