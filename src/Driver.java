@@ -9,6 +9,7 @@ public class Driver {
 		System.out.println("1 - Test Scaling");
 		System.out.println("2 - Test Addition");
 		System.out.println("3 - Test Gauss-Jordan Elimination and Span");
+		System.out.println("5 - Test Multiplication");
 
 		int choice = sc.nextInt();
 
@@ -17,6 +18,7 @@ public class Driver {
 			case 2: testAddition(); break;
 			case 3: testGaussJordanSpan(); break;
 			case 4: testSpan(); break;
+			case 5: testMulti(); break;
 		}
 	}
 	public static void testScaling() {
@@ -134,5 +136,32 @@ public class Driver {
 		}
 
 		System.out.println("Span: " + Vector.span(spantest, numDims));
+	}
+
+	public static void testMulti() {
+		ArrayList<Vector> vectors1 = new ArrayList<Vector>();
+		vectors1.add(new Vector(new double[]{3, 2}, 2));
+		vectors1.add(new Vector(new double[]{5, 3}, 2));
+		vectors1.add(new Vector(new double[]{1, 4}, 2));
+		Matrix matrix1 = new Matrix(vectors1, 2);
+
+		ArrayList<Vector> vectors2 = new ArrayList<Vector>();
+		vectors2.add(new Vector(new double[]{6, 3, 0}, 3));
+		vectors2.add(new Vector(new double[]{8, 1, 4}, 3));
+		Matrix matrix2 = new Matrix(vectors2, 3);
+
+		Matrix productMatrix = matrix1.matrixTimes(matrix2);
+		if (productMatrix == null)
+			System.out.println("Fuck");
+		for(int i=0;i<productMatrix.ROWS;i++)
+		{
+			System.out.print("[ ");
+			for(int j=0;j<productMatrix.COLS;j++)
+			{
+				System.out.print(productMatrix.vectorList.get(j).data[i] + " ");
+			}
+			System.out.println("]");
+		}
+		System.out.println();
 	}
 }

@@ -12,7 +12,7 @@ public class Matrix {
     //The usage of an Array/List-like structure to store Matrix data as a list of Vectors. You may also store the Matrix as a 2d array.
 
     //The usage of immutable Integer variables to hold values for the number of rows/columns.
-	List<Vector> vectorList = new ArrayList<>();
+	ArrayList<Vector> vectorList = new ArrayList<>();
 	final int ROWS;
 	final int COLS;
 
@@ -40,7 +40,7 @@ public class Matrix {
     }
     //A proper implementation of a constructor, converting an already-existing array/list of data from a rudimentary data structure into the vector class.
     	//the dimension variable refers to the length of each vector inside list
-    public Matrix (List<Vector> list, int dimension){
+    public Matrix (ArrayList<Vector> list, int dimension){
     	for(Vector a: list)
     	{
     		vectorList.add(a);
@@ -58,33 +58,41 @@ public class Matrix {
 		//Errors for size mismatches when multiplying matrices must also be handled.
      public Matrix matrixTimes(Matrix other)
      {
-     		List<Vector> insideList = new ArrayList<>();
-     		double[] arrayHolder = new double[other.COLS];
-     		/*	
-     		for(int i = 0; i < ROWS; i++){//move row for A 
-     			for(int x = 0; x < other.COLS; x++)//move col for B to continue multiplying
-     			{
-     				for(int o = 0; o < COLS; o++)//multiplying step
-     				{ 
-     					arrayHolder[x] += vectorList.get(i).data[o] * other.vectorList.get(o).data[x];
-     				}
-     			}
-     				insideList.add(new Vector(arrayHolder, arrayHolder.length));
-     		}
-     			return new Matrix(insideList, insideList.size());
-     	}
-     		*/
+     		ArrayList<Vector> insideList = new ArrayList<>();
+            System.out.println("This.Cols = " + this.COLS + " Other.Rows = " + other.ROWS);
 
-     		for(int aIterator = 0; aIterator < COLS; aIterator++)
-     		{
-     			for(int bIterator = 0; bIterator < other.ROWS; bIterator++)
-     			{
-     				for(int multiplier = 0; multiplier < other.COLS; multiplier++)
-     					arrayHolder[bIterator] += vectorList.get(multiplier).data[aIterator] * other.vectorList.get(bIterator).data[multiplier];
-     			}
-     			insideList.add(new Vector(arrayHolder, arrayHolder.length));
-     		}
-     		return new Matrix(insideList, insideList.size());
+            // Check if valid for multiplication
+            if (this.COLS == other.ROWS)
+            {
+                // Initialize product matrix
+                int newRows = this.ROWS;
+                int newCols = other.COLS;
+                int area = newRows * newCols;
+
+                // Put into list of vectors
+                for(int i=0;i<newCols;i++)
+                    insideList.add(new Vector(newRows));
+
+                /*** Start of Multiplication ***/
+                // Pababa of multiplicand
+                for(int i=0;i<this.ROWS;i++)
+                {   
+                    // Left to Right of multiplier
+                    for(int j=0;j<other.COLS;j++)
+                    {
+                        double tempProduct = 0;
+                        // Left to Right of multiplicand
+                        for(int k=0;k<this.COLS;k++)
+                        {
+                            tempProduct += this.vectorList.get(k).data[i] *
+                                            other.vectorList.get(j).data[k];
+                        }
+                        insideList.get(j).data[i] = tempProduct;
+                    }
+                }
+            }
+
+            return new Matrix(insideList, insideList.size());
      }
      	
 
