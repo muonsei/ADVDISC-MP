@@ -56,7 +56,7 @@ public class Matrix {
      //Function header to be used: Matrix times (Matrix other)
      	//Usage example: Assuming a Matrix a and Matrix b exists, a.times(b) should output the matrix multiplication of a and b.
 		//Errors for size mismatches when multiplying matrices must also be handled.
-     public Matrix matrixTimes(Matrix other)
+     public Matrix times(Matrix other)
      {
      		ArrayList<Vector> insideList = new ArrayList<>();
             System.out.println("This.Cols = " + this.COLS + " Other.Rows = " + other.ROWS);
@@ -172,7 +172,7 @@ public class Matrix {
 		Matrix g = new Matrix(3);
 		Matrix z = new Matrix(3);
 		//g.printMatrix();
-		(g.matrixTimes(z)).printMatrix();
+		(g.times(z)).printMatrix();
 		//g.checkVertical(1);
 	}
 
