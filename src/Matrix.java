@@ -95,10 +95,63 @@ public class Matrix {
             return new Matrix(insideList, insideList.size());
      }
      	
-
     /* -------------------- An implementation of a function that performs Gauss-Jordan Elimination to find the determinant of the matrix. (10 points) ---------*/
     	//The function must incorporate an implementation of Gauss-Jordan Elimination.
 		//Usage example: Given a Matrix m, the function call m.det() should return the determinant of the matrix.
+    public double det()
+    {
+        double determinant = 1;
+
+        // Perform Gauss Jordan
+        for(int i=0;i<this.vectorList.size();i++)
+        {
+            if(this.vectorList.get(i).data[i] == 0)
+            {
+                boolean isReplaced = false;
+                for(int j=i+1;!isReplaced && j<this.vectorList.size();j++)
+                {
+                    if(this.vectorList.get(j).data[i] != 0)
+                        isReplaced = true;
+                }
+            }
+
+            double[] pivotRowArray = new double[this.vectorList.size()];
+            double pivotElement = this.vectorList.get(i).data[i];
+            System.out.println("Pivot = " + pivotElement + " CurrDet = " + determinant);
+            for(int j=i;j<this.vectorList.size();j++) {
+                if(pivotElement != 0)
+                {
+                    this.vectorList.get(j).data[i] /= pivotElement;
+                    pivotRowArray[j] = this.vectorList.get(j).data[i];
+                }
+            }
+            // Pivot element lang gagalawin for determinant
+            if(pivotElement != 0)
+                determinant /= pivotElement;
+
+            // Reduce bottom to row echelon form
+            for(int k=i+1;k<this.vectorList.get(0).data.length;k++) // Go from pivot to last row
+            {
+                double multiplier = this.vectorList.get(i).data[k]; // Yung magiging 0 na element
+                for(int j=i;j<this.vectorList.size();j++) // Left to right excluding 0th columns
+                    this.vectorList.get(j).data[k] = (pivotRowArray[j] * multiplier) - this.vectorList.get(j).data[k];
+            }
+
+
+            // Reduce top to row echelon form
+            for(int k=i-1;k>=0;k--) // Go from pivot to first row
+            {
+
+                double multiplier = this.vectorList.get(i).data[k]; // Yung magiging 0 na element
+                for(int j=i;j<this.vectorList.size();j++) // Left to right excluding 0th columns
+                    this.vectorList.get(j).data[k] = this.vectorList.get(j).data[k] - (pivotRowArray[j] * multiplier);
+            }
+
+        }
+
+        return (1 / determinant) * -1;
+    }
+
 
     /* -------------------- An implementation of a function that finds the inverse of the matrix ------------------------------- */
     	//The function must incorporate an implementation of Gauss-Jordan Elimination. The function must return a null value if the matrix is not invertible; the matrix does not have an inverse.

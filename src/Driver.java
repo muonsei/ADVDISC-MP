@@ -10,6 +10,7 @@ public class Driver {
 		System.out.println("2 - Test Addition");
 		System.out.println("3 - Test Gauss-Jordan Elimination and Span");
 		System.out.println("5 - Test Multiplication");
+		System.out.println("6 - Test Determinant");
 
 		int choice = sc.nextInt();
 
@@ -19,6 +20,7 @@ public class Driver {
 			case 3: testGaussJordanSpan(); break;
 			case 4: testSpan(); break;
 			case 5: testMulti(); break;
+			case 6: testDet(); break;
 		}
 	}
 	public static void testScaling() {
@@ -163,5 +165,15 @@ public class Driver {
 			System.out.println("]");
 		}
 		System.out.println();
+	}
+
+	public static void testDet() {
+		ArrayList<Vector> vectors1 = new ArrayList<Vector>();
+		vectors1.add(new Vector(new double[]{2, 2, 1}, 3));
+		vectors1.add(new Vector(new double[]{-3, 0, 4}, 3));
+		vectors1.add(new Vector(new double[]{1, -1, 5}, 3));
+		Matrix matrix1 = new Matrix(vectors1, 3);
+
+		System.out.println("Determinant = " + matrix1.det());
 	}
 }
