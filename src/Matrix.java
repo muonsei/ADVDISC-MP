@@ -156,7 +156,18 @@ public class Matrix {
     /* -------------------- An implementation of a function that finds the inverse of the matrix ------------------------------- */
     	//The function must incorporate an implementation of Gauss-Jordan Elimination. The function must return a null value if the matrix is not invertible; the matrix does not have an inverse.
     	//Usage example: Given a Matrix m, m.inverse() should return a matrix containing the matrix inverse of m.
+    public Matrix inverse() {
+        if (det() == 0) // if determinant is 0
+            return null; // determinant does not exist
 
+        // clone the matrix
+        Matrix copy = this.clone();
+
+        // build an identity matrix with same dimensions as current matrix, to be used as "augmented matrix"
+        Matrix identity = new Matrix(ROWS);
+
+        // TODO: perform GJE on matrix copy while performing the same operations on the identity matrix
+    }
 
 
     /* ------------------ Add-On Functions --------------- */
@@ -183,6 +194,20 @@ public class Matrix {
         }
 
         return true;
+    }
+
+    // Clones a matrix
+    public Matrix clone() {
+        int dimension = ROWS; // THIS IS SO CONFUSING
+
+        ArrayList<Vector> cloneList = new ArrayList<>();
+        for (Vector a : vectorList) {
+            double[] newArray = new double[dimension];
+            System.arraycopy(a.data, 0, newArray, 0, a.data.length);
+            cloneList.add(new Vector(newArray, dimension));
+        }
+
+        return new Matrix(cloneList, dimension);
     }
 
     /*
