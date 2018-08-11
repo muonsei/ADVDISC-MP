@@ -35,8 +35,8 @@ public class Matrix {
 	    	vectorList.add(new Vector(arrayHolder, arrayHolder.length));
     	}
     	//baliktad ba?
-    	ROWS = vectorList.size();
-	    COLS = dimension;
+    	ROWS = dimension;
+	    COLS = vectorList.size();
     }
     //A proper implementation of a constructor, converting an already-existing array/list of data from a rudimentary data structure into the vector class.
     	//the dimension variable refers to the length of each vector inside list
@@ -46,8 +46,8 @@ public class Matrix {
     		vectorList.add(a);
     	}
     	//baliktad ba?
-    	ROWS = vectorList.size();
-	    COLS = dimension;
+    	ROWS = dimension;
+	    COLS = vectorList.size();
     }
 
 
@@ -56,7 +56,7 @@ public class Matrix {
      //Function header to be used: Matrix times (Matrix other)
      	//Usage example: Assuming a Matrix a and Matrix b exists, a.times(b) should output the matrix multiplication of a and b.
 		//Errors for size mismatches when multiplying matrices must also be handled.
-     public Matrix matrixMulti(Matrix other)
+     public Matrix matrixTimes(Matrix other)
      {
      		List<Vector> insideList = new ArrayList<>();
      		double[] arrayHolder = new double[other.COLS];
@@ -111,7 +111,7 @@ public class Matrix {
 		Matrix g = new Matrix(3);
 		Matrix z = new Matrix(3);
 		//g.printMatrix();
-		(g.matrixMulti(z)).printMatrix();
+		(g.matrixTimes(z)).printMatrix();
 		//g.checkVertical(1);
 	}
 
