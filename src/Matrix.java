@@ -156,7 +156,11 @@ public class Matrix {
     /* -------------------- An implementation of a function that finds the inverse of the matrix ------------------------------- */
     	//The function must incorporate an implementation of Gauss-Jordan Elimination. The function must return a null value if the matrix is not invertible; the matrix does not have an inverse.
     	//Usage example: Given a Matrix m, m.inverse() should return a matrix containing the matrix inverse of m.
+
+
+
     /* ------------------ Add-On Functions --------------- */
+    // Prints the matrix
     public void printMatrix()
     {
     	for(Vector a: vectorList)
@@ -167,6 +171,21 @@ public class Matrix {
     	}
     }
 
+    // Checks if the matrix is an identity matrix
+    public boolean isIdentity() {
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < vectorList.size(); j++) {
+                if (i == j && vectorList.get(j).data[i] != 1) // if within diagonal and not 1
+                    return false;
+                else if (vectorList.get(j).data[i] != 0) // if not within diagonal and not 0
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
+    /*
 	public static void main(String args[])
 	{
 		Matrix g = new Matrix(3);
@@ -175,5 +194,5 @@ public class Matrix {
 		(g.times(z)).printMatrix();
 		//g.checkVertical(1);
 	}
-
+    */
 }
