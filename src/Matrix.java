@@ -166,7 +166,18 @@ public class Matrix {
         // build an identity matrix with same dimensions as current matrix, to be used as "augmented matrix"
         Matrix identity = new Matrix(ROWS);
 
-        // TODO: perform GJE on matrix copy while performing the same operations on the identity matrix
+        // augment identity matrix to clone
+        for (Vector v : identity.vectorList) {
+            copy.vectorList.add(v);
+        }
+
+        // TODO FOR GAVIN: perform GJE on copy
+
+        // get the latter half of the matrix, which was originally an identity matrix
+        copy.vectorList = new ArrayList<Vector>(copy.vectorList.subList(vectorList.size()/2 - 1, vectorList.size() - 1));
+
+        // return copy
+        return copy;
     }
 
 
@@ -198,16 +209,14 @@ public class Matrix {
 
     // Clones a matrix
     public Matrix clone() {
-        int dimension = ROWS; // THIS IS SO CONFUSING
-
         ArrayList<Vector> cloneList = new ArrayList<>();
         for (Vector a : vectorList) {
-            double[] newArray = new double[dimension];
+            double[] newArray = new double[ROWS];
             System.arraycopy(a.data, 0, newArray, 0, a.data.length);
-            cloneList.add(new Vector(newArray, dimension));
+            cloneList.add(new Vector(newArray, ROWS));
         }
 
-        return new Matrix(cloneList, dimension);
+        return new Matrix(cloneList, ROWS);
     }
 
     /*
