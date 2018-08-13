@@ -128,7 +128,7 @@ public class Vector {
                 if(pivotElement != 0)
                 {
                     vectors.get(j).data[i] /= pivotElement;
-                    pivotRowArray[j] = vectors.get(j).data[i];
+                    pivotRowArray[j] = vectors.get(j).data[i];//rewrie the array
                 }
             }
 

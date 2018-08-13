@@ -172,7 +172,47 @@ public class Matrix {
         }
 
         // TODO FOR GAVIN: perform GJE on copy
+        for(int i=0;i<copy.vectorList.size();i++)
+        {
+            if(copy.vectorList.get(i).data[i] == 0)
+            {
+                boolean isReplaced = false;
+                for(int j=i+1;!isReplaced && j<copy.vectorList.size();j++)
+                {
+                    if(copy.vectorList.get(j).data[i] != 0)
+                        isReplaced = true;
+                }
+            }
 
+            double[] pivotRowArray = new double[copy.vectorList.size()];
+            double pivotElement = copy.vectorList.get(i).data[i];
+            for(int j=i;j<copy.vectorList.size();j++) {
+                if(pivotElement != 0)
+                {
+                    copy.vectorList.get(j).data[i] /= pivotElement;
+                    pivotRowArray[j] = copy.vectorList.get(j).data[i];
+                }
+            }
+
+            // Reduce bottom to row echelon form
+            for(int k=i+1;k<copy.vectorList.get(0).data.length;k++) // Go from pivot to last row
+            {
+                double multiplier = copy.vectorList.get(i).data[k]; // Yung magiging 0 na element
+                for(int j=i;j<copy.vectorList.size();j++) // Left to right excluding 0th columns
+                    copy.vectorList.get(j).data[k] = (pivotRowArray[j] * multiplier) - copy.vectorList.get(j).data[k];
+            }
+
+
+            // Reduce top to row echelon form
+            for(int k=i-1;k>=0;k--) // Go from pivot to first row
+            {
+
+                double multiplier = copy.vectorList.get(i).data[k]; // Yung magiging 0 na element
+                for(int j=i;j<copy.vectorList.size();j++) // Left to right excluding 0th columns
+                    copy.vectorList.get(j).data[k] = copy.vectorList.get(j).data[k] - (pivotRowArray[j] * multiplier);
+            }
+
+        }
         // get the latter half of the matrix, which was originally an identity matrix
         copy.vectorList = new ArrayList<Vector>(copy.vectorList.subList(vectorList.size()/2 - 1, vectorList.size() - 1));
 
@@ -219,14 +259,4 @@ public class Matrix {
         return new Matrix(cloneList, ROWS);
     }
 
-    /*
-	public static void main(String args[])
-	{
-		Matrix g = new Matrix(3);
-		Matrix z = new Matrix(3);
-		//g.printMatrix();
-		(g.times(z)).printMatrix();
-		//g.checkVertical(1);
-	}
-    */
 }
