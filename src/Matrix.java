@@ -12,9 +12,9 @@ public class Matrix {
     //The usage of an Array/List-like structure to store Matrix data as a list of Vectors. You may also store the Matrix as a 2d array.
 
     //The usage of immutable Integer variables to hold values for the number of rows/columns.
-	ArrayList<Vector> vectorList = new ArrayList<>();
-	final int ROWS;
-	final int COLS;
+	ArrayList<Vector> vectorList = new ArrayList<Vector>();
+	int ROWS;
+	int COLS;
 
     /*------------------ A proper implementation of a Matrix function via the usage of the created Vector data structure ------------------*/
    
@@ -127,7 +127,7 @@ public class Matrix {
 
             double[] pivotRowArray = new double[this.vectorList.size()];
             double pivotElement = this.vectorList.get(i).data[i];
-            System.out.println("Pivot = " + pivotElement + " CurrDet = " + determinant);
+            //System.out.println("Pivot = " + pivotElement + " CurrDet = " + determinant);
             for(int j=i;j<this.vectorList.size();j++) {
                 if(pivotElement != 0)
                 {
@@ -136,8 +136,7 @@ public class Matrix {
                 }
             }
             // Pivot element lang gagalawin for determinant
-            //if(pivotElement != 0)
-                determinant /= pivotElement;
+            determinant /= pivotElement;
 
             // Reduce bottom to row echelon form
             for(int k=i+1;k<this.vectorList.get(0).data.length;k++) // Go from pivot to last row
@@ -171,11 +170,11 @@ public class Matrix {
     	//The function must incorporate an implementation of Gauss-Jordan Elimination. The function must return a null value if the matrix is not invertible; the matrix does not have an inverse.
     	//Usage example: Given a Matrix m, m.inverse() should return a matrix containing the matrix inverse of m.
     public Matrix inverse() {
-        if (det() == 0) // if determinant is 0
-            return null; // determinant does not exist
-
         // clone the matrix
         Matrix copy = this.clone();
+
+        if (det() == 0) // if determinant is 0
+            return null; // determinant does not exist
 
         // build an identity matrix with same dimensions as current matrix, to be used as "augmented matrix"
         Matrix identity = new Matrix(ROWS);
@@ -184,17 +183,25 @@ public class Matrix {
         for (Vector v : identity.vectorList) {
             copy.vectorList.add(v);
         }
+        copy.COLS = copy.vectorList.size();
 
         // TODO FOR GAVIN: perform GJE on copy
-        for(int i=0;i<copy.vectorList.size();i++)
+        for(int i=0;i<copy.ROWS;i++)
         {
             if(copy.vectorList.get(i).data[i] == 0)
             {
                 boolean isReplaced = false;
-                for(int j=i+1;!isReplaced && j<copy.vectorList.size();j++)
+                for(int j=i+1;!isReplaced && j<copy.ROWS;j++)
                 {
-                    if(copy.vectorList.get(j).data[i] != 0)
+                    if(copy.vectorList.get(j).data[i] != 0){
+                        for(int k=0;k<copy.vectorList.size();k++)
+                        {
+                            double tempSwap = copy.vectorList.get(k).data[i];
+                            copy.vectorList.get(k).data[i] = copy.vectorList.get(k).data[j];
+                            copy.vectorList.get(k).data[j] = tempSwap;
+                        }
                         isReplaced = true;
+                    }
                 }
             }
 
@@ -212,23 +219,27 @@ public class Matrix {
             for(int k=i+1;k<copy.vectorList.get(0).data.length;k++) // Go from pivot to last row
             {
                 double multiplier = copy.vectorList.get(i).data[k]; // Yung magiging 0 na element
-                for(int j=i;j<copy.vectorList.size();j++) // Left to right excluding 0th columns
-                    copy.vectorList.get(j).data[k] = (pivotRowArray[j] * multiplier) - copy.vectorList.get(j).data[k];
+                if (multiplier != 0.0) {
+                    for(int j=i;j<copy.vectorList.size();j++) // Left to right excluding 0th columns
+                        copy.vectorList.get(j).data[k] = (pivotRowArray[j] * multiplier) - copy.vectorList.get(j).data[k];
+                }
             }
 
 
             // Reduce top to row echelon form
             for(int k=i-1;k>=0;k--) // Go from pivot to first row
             {
-
                 double multiplier = copy.vectorList.get(i).data[k]; // Yung magiging 0 na element
-                for(int j=i;j<copy.vectorList.size();j++) // Left to right excluding 0th columns
-                    copy.vectorList.get(j).data[k] = copy.vectorList.get(j).data[k] - (pivotRowArray[j] * multiplier);
+                if (multiplier != 0.0) {
+                    for(int j=i;j<copy.vectorList.size();j++) // Left to right excluding 0th columns
+                        copy.vectorList.get(j).data[k] = copy.vectorList.get(j).data[k] - (pivotRowArray[j] * multiplier);
+                }
             }
 
         }
         // get the latter half of the matrix, which was originally an identity matrix
-        copy.vectorList = new ArrayList<Vector>(copy.vectorList.subList(vectorList.size()/2 - 1, vectorList.size() - 1));
+        copy.vectorList = new ArrayList<Vector>(copy.vectorList.subList(copy.vectorList.size()/2, copy.vectorList.size()));
+        copy.COLS = copy.vectorList.size();
 
         // return copy
         return copy;
@@ -268,10 +279,10 @@ public class Matrix {
     // Clones a matrix
     public Matrix clone() {
         ArrayList<Vector> cloneList = new ArrayList<>();
-        for (Vector a : vectorList) {
+        for (Vector a : this.vectorList) {
             double[] newArray = new double[ROWS];
             System.arraycopy(a.data, 0, newArray, 0, a.data.length);
-            cloneList.add(new Vector(newArray, ROWS));
+            cloneList.add(new Vector(a.data, ROWS));
         }
 
         return new Matrix(cloneList, ROWS);

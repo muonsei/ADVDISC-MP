@@ -11,6 +11,7 @@ public class Driver {
 		System.out.println("3 - Test Gauss-Jordan Elimination and Span");
 		System.out.println("5 - Test Multiplication");
 		System.out.println("6 - Test Determinant");
+		System.out.println("7 - Test Inverse");
 
 		int choice = sc.nextInt();
 
@@ -21,6 +22,7 @@ public class Driver {
 			case 4: testSpan(); break;
 			case 5: testMulti(); break;
 			case 6: testDet(); break;
+			case 7: testInverse(); break;
 		}
 	}
 	public static void testScaling() {
@@ -192,5 +194,33 @@ public class Driver {
 		Matrix matrix1 = new Matrix(vectors1, numDims1);
 
 		System.out.println("Determinant = " + matrix1.det());
+	}
+
+	public static void testInverse() {
+		Scanner sc = new Scanner(System.in);
+
+		System.out.print("Enter number of vectors: ");
+		int numVects = sc.nextInt();
+
+		System.out.print("Enter number of dimensions: ");
+		int numDims = sc.nextInt();
+
+		ArrayList<Vector> testVectors = new ArrayList<Vector>();
+		for(int a=0;a<numVects;a++)
+		{
+			double[] dataArr = new double[numDims];
+			System.out.print("Enter Vector #" + (a+1) + ": ");
+			for(int b=0;b<numDims;b++)
+			{
+				dataArr[b] = sc.nextDouble();
+			}
+			testVectors.add(new Vector(dataArr, numDims));
+		}
+
+		Matrix matrix1 = new Matrix(testVectors, numDims);
+		matrix1.printMatrix();
+		Matrix newMatrix = matrix1.inverse();
+		if (newMatrix != null)
+			newMatrix.printMatrix();
 	}
 }
