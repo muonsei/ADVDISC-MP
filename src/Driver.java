@@ -153,7 +153,7 @@ public class Driver {
 		vectors2.add(new Vector(new double[]{0, 0, 1}, 3));
 		Matrix matrix2 = new Matrix(vectors2, 3);
 
-		Matrix productMatrix = matrix1.matrixTimes(matrix2);
+		Matrix productMatrix = matrix1.times(matrix2);
 		if (productMatrix == null)
 			System.out.println("Fuck");
 		else {
