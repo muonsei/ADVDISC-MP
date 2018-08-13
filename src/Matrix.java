@@ -59,14 +59,14 @@ public class Matrix {
      public Matrix times(Matrix other)
      {
      		ArrayList<Vector> insideList = new ArrayList<>();
-            System.out.println("This.Cols = " + this.COLS + " Other.Rows = " + other.ROWS);
+            int newRows, newCols;
 
             // Check if valid for multiplication
             if (this.COLS == other.ROWS)
             {
                 // Initialize product matrix
-                int newRows = this.ROWS;
-                int newCols = other.COLS;
+                newRows = this.ROWS;
+                newCols = other.COLS;
                 int area = newRows * newCols;
 
                 // Put into list of vectors
@@ -90,9 +90,9 @@ public class Matrix {
                         insideList.get(j).data[i] = tempProduct;
                     }
                 }
+                return new Matrix(insideList, newRows);
             }
-
-            return new Matrix(insideList, insideList.size());
+        return null;
      }
      	
     /* -------------------- An implementation of a function that performs Gauss-Jordan Elimination to find the determinant of the matrix. (10 points) ---------*/
@@ -100,6 +100,9 @@ public class Matrix {
 		//Usage example: Given a Matrix m, the function call m.det() should return the determinant of the matrix.
     public double det()
     {
+        if (this.ROWS != this.COLS)
+            return 0.0;
+
         double determinant = 1;
 
         // Perform Gauss Jordan
@@ -108,10 +111,17 @@ public class Matrix {
             if(this.vectorList.get(i).data[i] == 0)
             {
                 boolean isReplaced = false;
-                for(int j=i+1;!isReplaced && j<this.vectorList.size();j++)
+                for(int j=i+1;!isReplaced && j<this.ROWS;j++)
                 {
-                    if(this.vectorList.get(j).data[i] != 0)
+                    if(this.vectorList.get(i).data[j] != 0) {
+                        for(int k=0;k<this.vectorList.size();k++)
+                        {
+                            double tempSwap = this.vectorList.get(k).data[i];
+                            this.vectorList.get(k).data[i] = this.vectorList.get(k).data[j];
+                            this.vectorList.get(k).data[j] = tempSwap;
+                        }
                         isReplaced = true;
+                    }
                 }
             }
 
@@ -126,27 +136,31 @@ public class Matrix {
                 }
             }
             // Pivot element lang gagalawin for determinant
-            if(pivotElement != 0)
+            //if(pivotElement != 0)
                 determinant /= pivotElement;
 
             // Reduce bottom to row echelon form
             for(int k=i+1;k<this.vectorList.get(0).data.length;k++) // Go from pivot to last row
             {
                 double multiplier = this.vectorList.get(i).data[k]; // Yung magiging 0 na element
-                for(int j=i;j<this.vectorList.size();j++) // Left to right excluding 0th columns
-                    this.vectorList.get(j).data[k] = (pivotRowArray[j] * multiplier) - this.vectorList.get(j).data[k];
+                if (multiplier != 0.0) {
+                    for(int j=i;j<this.vectorList.size();j++) // Left to right excluding 0th columns 
+                        this.vectorList.get(j).data[k] = (pivotRowArray[j] * multiplier) - this.vectorList.get(j).data[k];
+                }
             }
 
 
             // Reduce top to row echelon form
             for(int k=i-1;k>=0;k--) // Go from pivot to first row
             {
-
                 double multiplier = this.vectorList.get(i).data[k]; // Yung magiging 0 na element
-                for(int j=i;j<this.vectorList.size();j++) // Left to right excluding 0th columns
-                    this.vectorList.get(j).data[k] = this.vectorList.get(j).data[k] - (pivotRowArray[j] * multiplier);
+                if (multiplier != 0.0) {
+                    for(int j=i;j<this.vectorList.size();j++) // Left to right excluding 0th columns
+                        this.vectorList.get(j).data[k] = this.vectorList.get(j).data[k] - (pivotRowArray[j] * multiplier);
+                }
             }
 
+            //printMatrix();
         }
 
         return (1 / determinant) * -1;
@@ -225,12 +239,16 @@ public class Matrix {
     // Prints the matrix
     public void printMatrix()
     {
-    	for(Vector a: vectorList)
-    	{
-    		for(int i = 0; i < a.data.length; i++)
-    		System.out.print(a.data[i] + " ");
-    	System.out.println("");
-    	}
+        for(int i=0;i<this.ROWS;i++)
+        {
+            System.out.print("[ ");
+            for(int j=0;j<this.COLS;j++)
+            {
+                System.out.print(this.vectorList.get(j).data[i] + " ");
+            }
+            System.out.println("]");
+        }
+        System.out.println();
     }
 
     // Checks if the matrix is an identity matrix
@@ -258,5 +276,4 @@ public class Matrix {
 
         return new Matrix(cloneList, ROWS);
     }
-
 }
