@@ -142,37 +142,54 @@ public class Driver {
 
 	public static void testMulti() {
 		ArrayList<Vector> vectors1 = new ArrayList<Vector>();
-		vectors1.add(new Vector(new double[]{3, 2}, 2));
-		vectors1.add(new Vector(new double[]{5, 3}, 2));
 		vectors1.add(new Vector(new double[]{1, 4}, 2));
+		vectors1.add(new Vector(new double[]{2, 5}, 2));
+		vectors1.add(new Vector(new double[]{3, 6}, 2));
 		Matrix matrix1 = new Matrix(vectors1, 2);
 
 		ArrayList<Vector> vectors2 = new ArrayList<Vector>();
-		vectors2.add(new Vector(new double[]{6, 3, 0}, 3));
-		vectors2.add(new Vector(new double[]{8, 1, 4}, 3));
+		vectors2.add(new Vector(new double[]{1, 0, 0}, 3));
+		vectors2.add(new Vector(new double[]{0, 1, 0}, 3));
+		vectors2.add(new Vector(new double[]{0, 0, 1}, 3));
 		Matrix matrix2 = new Matrix(vectors2, 3);
 
 		Matrix productMatrix = matrix1.matrixTimes(matrix2);
 		if (productMatrix == null)
 			System.out.println("Fuck");
-		for(int i=0;i<productMatrix.ROWS;i++)
-		{
-			System.out.print("[ ");
-			for(int j=0;j<productMatrix.COLS;j++)
+		else {
+			for(int i=0;i<productMatrix.ROWS;i++)
 			{
-				System.out.print(productMatrix.vectorList.get(j).data[i] + " ");
+				System.out.print("[ ");
+				for(int j=0;j<productMatrix.COLS;j++)
+				{
+					System.out.print(productMatrix.vectorList.get(j).data[i] + " ");
+				}
+				System.out.println("]");
 			}
-			System.out.println("]");
+			//System.out.println();
 		}
-		System.out.println();
 	}
 
 	public static void testDet() {
+		Scanner sc = new Scanner(System.in);
 		ArrayList<Vector> vectors1 = new ArrayList<Vector>();
-		vectors1.add(new Vector(new double[]{2, 2, 1}, 3));
-		vectors1.add(new Vector(new double[]{-3, 0, 4}, 3));
-		vectors1.add(new Vector(new double[]{1, -1, 5}, 3));
-		Matrix matrix1 = new Matrix(vectors1, 3);
+		//vectors1.add(new Vector(new double[]{4, 3}, 2));
+		//vectors1.add(new Vector(new double[]{6, 8}, 2));
+		//vectors1.add(new Vector(new double[]{1, -1, 5}, 3));
+
+		System.out.print("Enter number of dimensions: ");
+		int numDims1 = sc.nextInt();
+		System.out.print("Enter number of vectors: ");
+		int numVects = sc.nextInt();
+		for(int i=0;i<numVects;i++) {
+			Vector v1 = new Vector(numDims1);
+			System.out.print("Enter vector: ");
+			for(int j=0; j<numDims1; j++) {
+				v1.data[j] = sc.nextDouble();
+			}
+			vectors1.add(v1);
+		}
+		Matrix matrix1 = new Matrix(vectors1, numDims1);
 
 		System.out.println("Determinant = " + matrix1.det());
 	}
