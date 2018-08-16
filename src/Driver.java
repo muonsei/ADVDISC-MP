@@ -12,6 +12,7 @@ public class Driver {
 		System.out.println("5 - Test Multiplication");
 		System.out.println("6 - Test Determinant");
 		System.out.println("7 - Test Inverse");
+		System.out.println("8 - Test Transpose");
 
 		int choice = sc.nextInt();
 
@@ -23,6 +24,7 @@ public class Driver {
 			case 5: testMulti(); break;
 			case 6: testDet(); break;
 			case 7: testInverse(); break;
+			case 8: testTranspose(); break;
 		}
 	}
 	public static void testScaling() {
@@ -175,8 +177,8 @@ public class Driver {
 	public static void testDet() {
 		Scanner sc = new Scanner(System.in);
 		ArrayList<Vector> vectors1 = new ArrayList<Vector>();
-		//vectors1.add(new Vector(new double[]{4, 3}, 2));
-		//vectors1.add(new Vector(new double[]{6, 8}, 2));
+		vectors1.add(new Vector(new double[]{4, 3}, 2));
+		vectors1.add(new Vector(new double[]{6, 8}, 2));
 		//vectors1.add(new Vector(new double[]{1, -1, 5}, 3));
 
 		System.out.print("Enter number of dimensions: ");
@@ -222,5 +224,15 @@ public class Driver {
 		Matrix newMatrix = matrix1.inverse();
 		if (newMatrix != null)
 			newMatrix.printMatrix();
+	}
+
+	public static void testTranspose() {
+		ArrayList<Vector> vectors1 = new ArrayList<Vector>();
+		vectors1.add(new Vector(new double[]{4, 3, 10}, 3));
+		vectors1.add(new Vector(new double[]{6, 8, 2}, 3));
+		Matrix matrix = new Matrix(vectors1, 3);
+
+		matrix.printMatrix();
+		matrix.transpose().printMatrix();
 	}
 }

@@ -98,10 +98,10 @@ public class Matrix {
     /* -------------------- An implementation of a function that performs Gauss-Jordan Elimination to find the determinant of the matrix. (10 points) ---------*/
     	//The function must incorporate an implementation of Gauss-Jordan Elimination.
 		//Usage example: Given a Matrix m, the function call m.det() should return the determinant of the matrix.
-    public double det()
+    public Double det()
     {
         if (this.ROWS != this.COLS)
-            return 0.0;
+            return null;
 
         double determinant = 1;
 
@@ -162,7 +162,7 @@ public class Matrix {
             //printMatrix();
         }
 
-        return (1 / determinant) * -1;
+        return new Double((1 / determinant) * -1);
     }
 
 
@@ -173,7 +173,7 @@ public class Matrix {
         // clone the matrix
         Matrix copy = this.clone();
 
-        if (det() == 0) // if determinant is 0
+        if (det() == null) // if determinant is null
             return null; // determinant does not exist
 
         // build an identity matrix with same dimensions as current matrix, to be used as "augmented matrix"
@@ -245,6 +245,26 @@ public class Matrix {
         return copy;
     }
 
+    /* -------------------- An implementation of a function that transposes the matrix ------------------------------- */
+    public Matrix transpose() {
+        // Create new Matrix
+        int newRows = this.COLS;
+        int newCols = this.ROWS;
+        ArrayList<Vector> newVectorList = new ArrayList<Vector>();
+        for(int i=0;i<newCols;i++)
+            newVectorList.add(new Vector(new double[newRows], newRows));
+        Matrix transposedMatrix = new Matrix(newVectorList, newRows);
+
+        for(int i=0;i<newCols;i++)
+        {
+            for(int j=0;j<newRows;j++)
+            {
+                transposedMatrix.vectorList.get(i).data[j] = this.vectorList.get(j).data[i];
+            }
+        }
+
+        return transposedMatrix;
+    }
 
     /* ------------------ Add-On Functions --------------- */
     // Prints the matrix
